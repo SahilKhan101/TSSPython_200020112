@@ -132,7 +132,7 @@ def game_over():
     """
     surface.fill(BACKGROUND_COLOR)
     font = pygame.font.SysFont('arial', 30)
-    line1 = font.render(f"Game is over! Your score is {snake.length}", True, (255, 255, 255))
+    line1 = font.render(f"Game is over! Your score is {score}", True, (255, 255, 255))
     surface.blit(line1, (200, 300))
 
     pygame.display.flip()
@@ -164,9 +164,9 @@ class Snake:
         self.image = pygame.image.load("resources/block.jpg").convert()
         self.direction = 'down'
 
-        self.length = 1
-        self.x = [40]
-        self.y = [40]
+        self.length = 2
+        self.x = [80,40]
+        self.y = [40,40]
 
     def move_left(self):
         if self.direction != 'right':
@@ -229,13 +229,13 @@ def collisionWithWall(x1, y1):
     yu = screen_rect.top
     yd = screen_rect.bottom
 
-    if x1 >= xr and x1 < xr + SIZE:
+    if x1 >= xr:
         return True
-    if x1 >= xl and x1 < xl + SIZE:
+    if x1 <= xl:
         return True
-    if y1 >= yu and y1 < yu + SIZE:
+    if y1 <= yu:
         return True
-    if y1 >= yd and y1 < yd + SIZE:
+    if y1 >= yd:
         return True
 
     return False
@@ -264,8 +264,10 @@ while True:
         snake.increase_length()
         apple.move()
     for i in range(2, snake.length):
-        if is_collision(snake.x[0], snake.y[0], snake.x[i], snake.y[i]) or collisionWithWall(snake.x[0], snake.y[0]):
+        if is_collision(snake.x[0], snake.y[0], snake.x[i], snake.y[i]):
             game_over()
+    if collisionWithWall(snake.x[0], snake.y[0]):
+        game_over()
     
 
     # To set the speed of the screen
